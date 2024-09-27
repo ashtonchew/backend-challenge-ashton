@@ -1,0 +1,37 @@
+1. Why did you choose the tools, libraries, and language you used for the coding exercise?
+I chose FastAPI for this exercise due to its exceptional speed, ease of use, and modern features like asynchronous support and automatic documentation generation with Swagger UI. FastAPI is well-suited for building RESTful APIs efficiently, which aligns perfectly with the requirements of the task.
+
+To define request and response schemas, I utilized Pydantic's BaseModel classes (Transaction, SpendRequest, and SpendResponse). Pydantic ensures data validation and automatic documentation, enhancing the reliability and maintainability of the API by enforcing type checks and providing clear models for input and output data.
+
+Considering the requirement to handle a single user without persistent storage, I employed in-memory data structures for simplicity and efficiency. The data structures used are:
+
+transactions: A list that stores transactions in their current state, allowing for easy sorting and manipulation.
+balances: A defaultdict that tracks payer balances with constant-time (O(1)) look-up, which improves performance when accessing or updating balances.
+
+To create a repeatable and maintainable test suite, I used FastAPI's TestClient. This tool facilitates the development and documentation of the required test cases within the same environment. Using TestClient allows for easy modification of existing test suites without substantial manual reworking when introducing new changes, promoting a robust and flexible testing process.
+
+
+2. What are the advantages and disadvantages of your solution?
+One of its key strengths is the maintenance of transaction integrity. It ensures that when handling negative points, previous transactions of the same payer are adjusted, preserving the accuracy of the transaction history and balances. Additionally, the solution adheres to the First-In, First-Out (FIFO) principle by sorting transactions by timestamp, ensuring that the oldest points are spent first as required. Another significant advantage is its prevention of negative balances, as the algorithm checks available points before deductions, adhering to business rules and avoiding balance inconsistencies. Updates to both the transaction points and the payer’s balance are made concurrently, ensuring synchronized updates and enhancing data consistency across the application. The solution also features proper error handling, using HTTPException to return clear and appropriate HTTP status codes, which provides helpful feedback to API consumers. Moreover, it avoids race conditions by ensuring consistency in updates to balances and transactions, which strengthens the robustness of the code, even though this isn't strictly necessary in a single-threaded environment.
+
+However, there are also some notable disadvantages. A major limitation is the lack of persistent storage. Since the solution uses in-memory data structures, all data is lost when the application stops, making it unsuitable for scenarios requiring data persistence. Additionally, the in-memory, single-threaded design poses scalability challenges, particularly when handling a large volume of transactions or multi-user environments without proper concurrency control. Another issue is the use of simplistic data structures such as basic lists and dictionaries, which may become inefficient as the dataset grows, necessitating more advanced data structures or databases for improved performance. Furthermore, the solution does not support user authentication or multi-user functionality, which is a critical requirement for a production environment to securely manage multiple users. Finally, while the solution provides some error handling for insufficient points, it lacks more comprehensive validation and handling of invalid input formats, unexpected data types, or missing fields, limiting its robustness.
+
+In summary, while the solution excels in maintaining data integrity and ensuring consistency, its limitations in scalability, data persistence, and error handling suggest it may need significant enhancements for broader, more complex applications.
+
+
+3. What has been a favorite school/personal project thus far? What about it that challenged you?
+My favorite project was developing a microservices application that integrated a sophisticated third-party API implementing multiple AI models for client-facing use. This project, during my year as a backend software engineer, challenged me both technically and interpersonally, enhancing my skills in AI integration and stakeholder management.
+
+A primary challenge was orchestrating the integration of diverse AI models while ensuring optimal performance and meeting stakeholder expectations. When implementing a natural language processing model for search automation, the model's response time didn't meet our product team's expectations. They insisted on sub-second responses for a smooth user experience, but we were averaging 3 seconds.
+
+To address this, I designed a caching layer using Redis to store frequent queries and their responses. I also implemented an asynchronous processing queue with Celery to handle complex queries in the background, providing immediate feedback to users while processing their requests. This solution reduced average response times to 800ms for common queries and provided a seamless experience for more complex requests, satisfying both the product team and end-users.
+
+To ensure ongoing alignment and code quality across our microservices architecture, I established bi-weekly code review schedules. These sessions became invaluable for maintaining consistent coding standards and sharing knowledge about the intricacies of AI model integration across our tech stack, which primarily utilized Python for its rich ecosystem of AI and data processing libraries. This was particularly important as the models implemented and tools developed were used in many pitch decks to clients.
+
+Another significant challenge was optimizing our data pipeline to handle the massive influx of data generated by the AI models while adhering to strict privacy regulations. I redesigned our data architecture using Apache Kafka for real-time data streaming and implemented a custom data anonymization layer in Python. This solution allowed us to process large volumes of AI-generated data efficiently while ensuring GDPR compliance.
+
+To address scalability concerns, I leveraged AWS Lambda for serverless computing to handle sporadic high-load scenarios from AI model inference. I also implemented a dynamic routing system using AWS API Gateway, which intelligently directed requests to the appropriate AI model based on real-time performance metrics and user requirements.
+
+Throughout the project, I constantly explored new technologies at the intersection of AI and backend engineering. I experimented with TensorFlow Serving for model deployment and developed interfaces on the existing boutique monitoring system using Grafana to track AI model performance in real-time.
+
+This project not only improved our customer satisfaction rates but also challenged me to think critically about AI integration, system design, and performance optimization in a real-world, high-stakes environment. It solidified my passion for backend engineering, particularly in client-facing products.

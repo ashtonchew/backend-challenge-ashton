@@ -10,7 +10,7 @@ This README provides instructions on how to set up, run, and test the API projec
 - Install FastAPI and Uvicorn using pip:
 
 ```
-pip install fastapi uvicorn
+pip install fastapi uvicorn httpx
 ```
 
 ### 2. Run the Application

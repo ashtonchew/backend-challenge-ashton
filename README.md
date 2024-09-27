@@ -13,7 +13,7 @@ This README provides instructions on how to set up, run, and test the API projec
 pip install fastapi uvicorn
 ```
 
-### 3. Run the Application
+### 2. Run the Application
 
 - Use Uvicorn to run the app on port 8000:
 
@@ -21,7 +21,7 @@ pip install fastapi uvicorn
 uvicorn main:app --reload --port 8000
 ```
 
-### 4. Test the API
+### 3. Test the API
 
 - You can use tools like **curl** or **Postman** to interact with the API.
 - Alternatively, navigate to `http://localhost:8000/docs` to access the automatic Swagger UI and test the endpoints interactively.
